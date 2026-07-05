@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EarnPkrauf</title>
+<style>
+:root{
+  --primary:#1d6cf5; --primary-d:#155ad1; --bg:#f4f7fb; --card:#ffffff;
+  --text:#0f1b2d; --muted:#6b7a90; --border:#e6ecf5; --green:#1aa251;
+  --red:#e5484d; --shadow:0 8px 24px rgba(29,108,245,.10);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text)}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;padding-bottom:84px}
+.grad{background:linear-gradient(135deg,#1d6cf5,#0d4fd0);color:#fff}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px}
+.topbar .brand{font-weight:800;font-size:18px;color:var(--primary)}
+.btn{border:none;border-radius:16px;padding:13px 18px;font-weight:700;font-size:15px;cursor:pointer;width:100%;display:block;text-align:center}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:active{background:var(--primary-d)}
+.btn-white{background:#fff;color:var(--primary)}
+.btn-danger{background:var(--red);color:#fff}
+.btn-dark{background:#0f1b2d;color:#fff}
+.pill{border-radius:999px;padding:8px 18px;font-weight:700;font-size:14px;display:inline-block}
+.card{background:var(--card);border-radius:20px;padding:18px;box-shadow:var(--shadow);margin:12px 16px}
+.soft{background:var(--card);border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.press{transition:transform .08s}.press:active{transform:scale(.97)}
+.muted{color:var(--muted);font-size:13px}
+.label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}
+.field{width:100%;border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-size:15px;background:#fff;outline:none;font-family:inherit}
+.field:focus{border-color:var(--primary)}
+h1,h2,h3{margin:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.emoji{font-size:30px}
+a{color:inherit;text-decoration:none}
+.center{text-align:center}
+.row{display:flex;align-items:center;justify-content:space-between}
+.hidden{display:none!important}
+.bignum{font-size:30px;font-weight:800;color:var(--primary)}
+.header-block{margin:8px 16px;border-radius:26px;padding:22px}
+.back{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:12px;padding:8px 14px;font-weight:600;cursor:pointer;font-size:13px}
+.tabbar{position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;background:#fff;border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 10px;z-index:50}
+.tabbar a{flex:1;text-align:center;font-size:11px;color:var(--muted);font-weight:600}
+.tabbar a .ic{font-size:20px;display:block}
+.tabbar a.active{color:var(--primary)}
+.list-item{border-bottom:1px solid var(--border);padding:10px 0}
+.list-item:last-child{border:none}
+.badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px}
+.b-pending{background:#fff4e0;color:#b7791f}
+.b-ok{background:#e4f7ec;color:var(--green)}
+.b-no{background:#fde8e8;color:var(--red)}
+.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#0f1b2d;color:#fff;padding:12px 18px;border-radius:14px;font-size:14px;z-index:99;opacity:0;transition:.3s;max-width:90%;pointer-events:none}
+.toast.show{opacity:1}
+.notif-dot{position:absolute;top:2px;right:2px;width:9px;height:9px;background:#ef4444;border-radius:50%;border:2px solid var(--primary)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;z-index:200;padding:20px}
+.modal-box{background:#fff;border-radius:20px;padding:24px;max-width:340px;width:100%;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,.3)}
+.stat{background:rgba(255,255,255,.15);border-radius:16px;padding:12px;text-align:center}
+.method-btn{border:1px solid var(--border);border-radius:14px;padding:10px;font-size:13px;font-weight:600;background:#fff;cursor:pointer}
+.method-btn.sel{background:var(--primary);color:#fff;border-color:var(--primary)}
+.spin-wheel{width:220px;height:220px;border-radius:50%;margin:0 auto;border:10px solid var(--primary);
+  background:conic-gradient(#1d6cf5 0 45deg,#e8f0ff 45deg 90deg,#1d6cf5 90deg 135deg,#e8f0ff 135deg 180deg,#1d6cf5 180deg 225deg,#e8f0ff 225deg 270deg,#1d6cf5 270deg 315deg,#e8f0ff 315deg 360deg);
+  display:flex;align-items:center;justify-content:center;font-size:40px;transition:transform 3s cubic-bezier(.17,.67,.24,1)}
+.spinner{width:26px;height:26px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite;margin:24px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.tag{display:inline-block;font-size:11px;background:#e8f0ff;color:var(--primary);padding:3px 10px;border-radius:999px;font-weight:700}
+.a-tabs{display:flex;gap:6px;overflow-x:auto;padding:0 16px 4px;-webkit-overflow-scrolling:touch}
+.a-tabs button{flex:0 0 auto;border:none;background:#fff;color:var(--muted);font-weight:700;font-size:13px;padding:9px 14px;border-radius:999px;box-shadow:var(--shadow);cursor:pointer;white-space:nowrap}
+.a-tabs button.active{background:var(--primary);color:#fff}
+.kpi{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px}
+.kpi .soft{margin:0;padding:14px}
+.proof-shot{width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin:8px 0;display:block;background:var(--bg)}
+.u-row{border-bottom:1px solid var(--border);padding:12px 0}
+.u-row:last-child{border:none}
+.u-row .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.demo-bar{background:#0f1b2d;color:#fff;font-size:11px;text-align:center;padding:6px 10px}
+.demo-bar b{color:#8fb4ff}
+.demo-bar button{background:none;border:1px solid rgba(255,255,255,.35);color:#fff;font-size:10px;padding:3px 8px;border-radius:999px;margin-left:8px;cursor:pointer}
+
+/* ---------------- parallax system (applies on every page/section) ---------------- */
+#px-bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+#px-bg span{position:absolute;border-radius:50%;filter:blur(40px);opacity:.35;will-change:transform}
+#px-bg span.b1{width:260px;height:260px;background:#1d6cf5;top:-80px;left:-60px}
+#px-bg span.b2{width:220px;height:220px;background:#8fb4ff;top:40vh;right:-80px}
+#px-bg span.b3{width:300px;height:300px;background:#0d4fd0;bottom:-100px;left:-40px}
+.app{position:relative;z-index:1;background:transparent!important}
+body{background:var(--bg)}
+.header-block{position:relative;overflow:hidden}
+.header-block .px-orb{position:absolute;border-radius:50%;background:rgba(255,255,255,.16);will-change:transform;pointer-events:none}
+.header-block .px-orb.o1{width:130px;height:130px;top:-50px;right:-30px}
+.header-block .px-orb.o2{width:80px;height:80px;bottom:-30px;left:-20px}
+.header-block>*{position:relative;z-index:1}
+@media (prefers-reduced-motion: reduce){
+  #px-bg span,.header-block .px-orb{transform:none!important;transition:none!important}
+}
+</style>
+</head>
+<body>
+<div id="px-bg"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+<div class="app" id="app"><div class="spinner"></div></div>
+
+<script>
+/* Scroll-driven parallax: background blobs drift slower than scroll,
+   header orbs drift opposite direction for depth. Runs globally so it
+   applies to every mounted page/section automatically. */
+(function(){
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) return;
+  let ticking = false;
+  function apply(){
+    const y = window.scrollY || window.pageYOffset || 0;
+    const bg = document.getElementById("px-bg");
+    if (bg){
+      const spans = bg.children;
+      if (spans[0]) spans[0].style.transform = "translateY(" + (y*0.15) + "px)";
+      if (spans[1]) spans[1].style.transform = "translateY(" + (y*-0.10) + "px)";
+      if (spans[2]) spans[2].style.transform = "translateY(" + (y*0.08) + "px)";
+    }
+    document.querySelectorAll(".header-block").forEach(function(h){
+      const rect = h.getBoundingClientRect();
+      const offset = rect.top * 0.15;
+      const orbs = h.querySelectorAll(".px-orb");
+      orbs.forEach(function(o,i){ o.style.transform = "translateY(" + (offset * (i?-1:1)) + "px)"; });
+    });
+    ticking = false;
+  }
+  window.addEventListener("scroll", function(){
+    if (!ticking){ requestAnimationFrame(apply); ticking = true; }
+  }, { passive:true });
+  // Inject orb elements into any header-block whenever the DOM changes (SPA re-mounts).
+  function injectOrbs(){
+    document.querySelectorAll(".header-block").forEach(function(h){
+      if (!h.querySelector(".px-orb")){
+        const o1=document.createElement("div"); o1.className="px-orb o1";
+        const o2=document.createElement("div"); o2.className="px-orb o2";
+        h.appendChild(o1); h.appendChild(o2);
+      }
+    });
+    apply();
+  }
+  const mo = new MutationObserver(injectOrbs);
+  mo.observe(document.getElementById("app"), { childList:true, subtree:true });
+  document.addEventListener("DOMContentLoaded", injectOrbs);
+  injectOrbs();
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   EarnPkrauf — cloud build. Data lives in Supabase (Postgres),
+   screenshots are hosted on Cloudinary. All money-affecting
+   logic (balances, tax, referral bonuses, admin approvals) runs
+   inside Postgres functions, not in this client-side file.
+   ============================================================ */
+
+window.EARNPKR_CONFIG = {
+  CURRENCY: "Rs",
+  DEPOSIT_ACCOUNT: "0300-1234567",
+  DEPOSIT_ACCOUNT_NAME: "EarnPkrauf",
+  SUPPORT_URL: "https://t.me/",
+  MIN_DEPOSIT: 50,
+  MIN_WITHDRAW: 100,
+  TAX_VIP_PERCENT: 4,   /* tax % for VIP (paid plan) users on task rewards + withdrawals */
+  TAX_FREE_PERCENT: 15, /* tax % for free (non-VIP) users on task rewards + withdrawals */
+};
+function taxRateFor(profile){ return (profile && profile.vip_level>0) ? EARNPKR_CONFIG.TAX_VIP_PERCENT : EARNPKR_CONFIG.TAX_FREE_PERCENT; }
+
+window.addEventListener("error", function(e){
+  alert("PAGE ERROR:\n" + e.message + "\nat line " + e.lineno + ":" + e.colno);
+});
+window.addEventListener("unhandledrejection", function(e){
+  alert("PROMISE ERROR:\n" + (e.reason && e.reason.message ? e.reason.message : e.reason));
+});
+
+/* ---------------- helpers ---------------- */
+window.rs = (n) => EARNPKR_CONFIG.CURRENCY + " " + Number(n || 0).toLocaleString();
+window.qs = (s, r = document) => r.querySelector(s);
+window.qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+function hashParts(){ let h = location.hash.slice(1) || "/"; let [route, query=""] = h.split("?"); return {route, query}; }
+window.getParam = (k) => new URLSearchParams(hashParts().query).get(k);
+window.toast = function (msg) {
+  let t = qs("#toast");
+  if (!t) { t = document.createElement("div"); t.id = "toast"; t.className = "toast"; document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add("show");
+  clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove("show"), 2400);
+};
+window.mount = (html) => { qs("#app").innerHTML = html; };
+window.loading = () => mount('<div class="spinner"></div>');
+window.errorBox = (msg) => `<div class="card center"><p class="muted">${msg}</p></div>`;
+/* shared date formatter (used by notifications, admin panel, etc.) — must be
+   global, not re-declared locally inside a single page function, otherwise
+   any other page calling it throws "fmtDate is not defined". */
+window.fmtDate = function (s) { if (!s) return "—"; const d = new Date(s); return isNaN(d) ? String(s) : d.toLocaleDateString(); };
+
+window.header = function ({ title, emoji = "", subtitle = "", back = "" }) {
+  return `<div class="grad header-block">
+    ${back ? `<a class="back" href="${back}">← Back</a>` : ""}
+    <h1 style="margin-top:${back ? "12px" : "0"};font-size:24px;font-weight:800">${emoji} ${title}</h1>
+    ${subtitle ? `<p style="opacity:.9;margin:6px 0 0;font-size:14px">${subtitle}</p>` : ""}
+  </div>`;
+};
+window.tabbar = function (active) {
+  const T = [["#/dashboard","🏠","Home"],["#/tasks","📋","Tasks"],["#/deposit","💳","Deposit"],["#/invite","👥","Invite"],["#/vip","👑","VIP"]];
+  return `<div class="tabbar">${T.map(([h, i, l]) =>
+    `<a href="${h}" class="${active === h ? "active" : ""}"><span class="ic">${i}</span>${l}</a>`).join("")}</div>`;
+};
+
+/* ============================================================
+   EarnPkrauf — now running on Supabase (cloud database) +
+   Cloudinary (image hosting) instead of localStorage.
+   All business logic (balances, tax, referral bonuses, admin
+   actions) lives in Postgres functions on Supabase, so it can't
+   be tampered with from the browser console anymore.
+   ============================================================ */
+
+window.SUPABASE_URL = "https://nmijxktbnpewuohrwcbz.supabase.co";
+window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5taWp4a3RibnBld3VvaHJ3Y2J6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMyMTc2OTAsImV4cCI6MjA5ODc5MzY5MH0.ZhEQ_r-QI54iRmk30FZscmOFPV6fF_LFZeSPuup1_To";
+window.CLOUDINARY_CLOUD_NAME = "vmphfgnr";
+window.CLOUDINARY_UPLOAD_PRESET = "Earnpkr";
+
+const sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+/* ---------------- image upload (Cloudinary) ---------------- */
+async function uploadToCloudinary(file){
+  const fd = new FormData();
+  fd.append("file", file);
+  fd.append("upload_preset", window.CLOUDINARY_UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${window.CLOUDINARY_CLOUD_NAME}/auto/upload`, { method: "POST", body: fd });
+  const data = await res.json();
+  if (!res.ok) throw new Error((data && data.error && data.error.message) || "Screenshot upload failed. Please try again.");
+  return data.secure_url;
+}
+async function uploadAllToCloudinary(files){
+  const urls = [];
+  for (const f of files) { if (f && f.size) urls.push(await uploadToCloudinary(f)); }
+  return urls;
+}
+
+/* ---------------- real auth session (Supabase Auth — cryptographically verified) ----------------
+   The server (Postgres functions) reads WHO you are from your signed-in session token
+   (auth.uid()), never from anything the browser sends as a plain parameter. So nobody
+   can open devtools and pretend to be another user anymore. */
+let _authUser = null;   // { id, email } of the signed-in Supabase Auth user
+let _isAdmin = false;
+
+window.initAuth = async function () {
+  const bar = document.getElementById("cfgWarnBar");
+  if (bar) bar.style.display = "none";
+  const { data: { session } } = await sb.auth.getSession();
+  _authUser = session ? session.user : null;
+  if (_authUser) {
+    try { const p = await rpc("get_profile", {}); _isAdmin = !!p.is_admin; }
+    catch (e) { _authUser = null; _isAdmin = false; }
+  }
+  sb.auth.onAuthStateChange((_event, session) => {
+    _authUser = session ? session.user : null;
+    if (!_authUser) _isAdmin = false;
+  });
+};
+window.isLoggedIn = () => !!_authUser;
+window.currentUserId = () => (_authUser ? _authUser.id : null);
+window.isCurrentUserAdmin = () => _isAdmin;
+window.requireAuth = function () { if (!isLoggedIn()) { location.hash = "#/login"; return false; } return true; };
+window.redirectIfAuthed = function () { if (isLoggedIn()) location.hash = "#/dashboard"; };
+window.logout = async function () { await sb.auth.signOut(); _authUser = null; _isAdmin = false; location.hash = "#/"; router(); };
+
+window.showWelcomePopup = function(title, text){
+  const el=document.createElement("div");
+  el.className="modal-overlay";
+  el.innerHTML=`<div class="modal-box"><div style="font-size:40px;margin-bottom:10px">🎉</div>
+    <h2 style="margin-bottom:8px">${title}</h2><p class="muted" style="margin-bottom:18px">${text}</p>
+    <button class="btn btn-primary" id="wp-close">Got it!</button></div>`;
+  document.body.appendChild(el);
+  el.querySelector("#wp-close").onclick=()=>el.remove();
+};
+
+/* VIP plan prices — used directly here, no backend needed */
+const VIP_PLANS = [
+  { level:1, price:500, referral_bonus:"+5% referral bonus", perks:["Priority tasks","5% referral bonus","Faster withdrawals","VIP support"] },
+];
+
+/* ---------------- API layer — talks to Supabase Postgres functions ----------------
+   Every function below reads auth.uid() on the server side, so no p_user_id /
+   p_actor_id is ever sent from here for "who am I" — only target ids for admin
+   actions on OTHER users are passed explicitly. */
+async function rpc(name, params){
+  const { data, error } = await sb.rpc(name, params || {});
+  if (error) throw new Error(error.message || "Something went wrong. Please try again.");
+  return data;
+}
+
+window.api = async function (path, { method = "GET", body = {}, form } = {}) {
+  /* public */
+  if (path === "/public/settings") return await rpc("get_public_settings");
+  if (path === "/public/home") return await rpc("get_public_home");
+
+  /* auth — handled by Supabase Auth itself (real signed sessions, not custom tables) */
+  if (path === "/auth/register" && method === "POST") {
+    const { data, error } = await sb.auth.signUp({
+      email: body.email, password: body.password,
+      options: { data: { name: body.name || "", username: body.username || "", phone: body.phone || "", ref: body.ref || "" } }
+    });
+    if (error) throw new Error(error.message);
+    _authUser = data.user;
+    let profile = null;
+    try { profile = await rpc("get_profile", {}); _isAdmin = !!(profile && profile.is_admin); }
+    catch (e) { /* email confirmation may be required before a profile/session exists yet */ }
+    return { token: data.user ? data.user.id : null, user: profile };
+  }
+  if (path === "/auth/login" && method === "POST") {
+    const { data, error } = await sb.auth.signInWithPassword({ email: body.email, password: body.password });
+    if (error) throw new Error(error.message === "Invalid login credentials" ? "Invalid email or password" : error.message);
+    _authUser = data.user;
+    const profile = await rpc("get_profile", {});
+    _isAdmin = !!profile.is_admin;
+    return { token: data.user.id, user: profile };
+  }
+  if (path === "/auth/logout") { await sb.auth.signOut(); _authUser = null; _isAdmin = false; return { ok:true }; }
+
+  /* user */
+  if (path === "/dashboard") {
+    const r = await rpc("get_dashboard", {});
+    _isAdmin = !!r.isAdmin;
+    return r;
+  }
+  if (path === "/profile" && method === "POST") {
+    const profile = await rpc("update_profile", { p_name: body.name ?? null, p_username: body.username ?? null,
+      p_phone: body.phone ?? null, p_payment_method: body.payment_method ?? null,
+      p_payment_account_number: body.payment_account_number ?? null, p_payment_account_title: body.payment_account_title ?? null });
+    return { profile };
+  }
+  if (path === "/notifications") return await rpc("get_notifications", {});
+  if (path === "/notifications/seen" && method === "POST") return await rpc("mark_notifications_seen", {});
+  if (path === "/invite") return await rpc("get_invite", {});
+  if (path === "/invite/claim" && method === "POST") return await rpc("claim_referral_bonus", {});
+
+  /* tasks */
+  if (path === "/tasks" && method === "GET") return await rpc("list_tasks", {});
+  if (path === "/tasks" && method === "POST") {
+    const files = form ? form.getAll("screenshots") : [];
+    const screenshots = await uploadAllToCloudinary(files);
+    return await rpc("create_task", { p_title: body.title, p_description: body.description || "",
+      p_link: body.link || "", p_reward: Number(body.reward), p_total_slots: Number(body.total_slots),
+      p_min_vip_level: Number(body.min_vip_level)||0, p_screenshots: screenshots });
+  }
+  if (path.match(/^\/tasks\/[^/]+\/start$/) && method === "POST") {
+    const taskId = path.split("/")[2];
+    return await rpc("start_task", { p_task_id: taskId });
+  }
+  if (path.startsWith("/tasks/") && path.endsWith("/proof") && method === "POST") {
+    const taskId = path.split("/")[2];
+    const files = form ? form.getAll("proof") : [];
+    if (!files.length) throw new Error("Please choose at least one screenshot");
+    const urls = await uploadAllToCloudinary(files);
+    return await rpc("submit_proof", { p_task_id: taskId, p_proof_urls: urls });
+  }
+  if (path === "/proofs") return await rpc("get_my_proofs", {});
+  if (path === "/manage") return await rpc("get_manage", {});
+  if (path.match(/^\/proofs\/.+\/review$/) && method === "POST") {
+    const id = path.split("/")[2];
+    return await rpc("review_proof", { p_proof_id: id, p_approve: !!body.approve });
+  }
+  if (path.match(/^\/tasks\/[^/]+$/) && method === "GET") {
+    const id = path.split("/")[2];
+    return await rpc("get_task", { p_task_id: id });
+  }
+
+  /* money */
+  if (path === "/deposit" && method === "POST") {
+    const files = form ? form.getAll("screenshot") : [];
+    if (!files.length || !files[0].size) throw new Error("Deposit screenshot is required");
+    const screenshotUrl = await uploadToCloudinary(files[0]);
+    return await rpc("make_deposit", { p_amount: Number(body.amount), p_method: body.method,
+      p_sender_account: body.sender_account, p_txn_ref: body.txn_ref, p_screenshot_url: screenshotUrl });
+  }
+  if (path === "/withdraw" && method === "POST") {
+    return await rpc("make_withdrawal", { p_amount: Number(body.amount), p_method: body.method, p_account_number: body.account_number });
+  }
+
+  /* rewards */
+  if (path === "/vip") return { plans: VIP_PLANS };
+  if (path === "/vip/buy" && method === "POST") return await rpc("vip_buy", { p_level: Number(body.level) });
+  if (path === "/spin" && method === "POST") return await rpc("do_spin", {});
+  if (path === "/streak" && method === "POST") return await rpc("do_streak", {});
+  if (path === "/coupon" && method === "POST") return await rpc("redeem_coupon", { p_code: body.code });
+
+  /* admin (server re-checks is_admin from auth.uid() on every call — a spoofed
+     client flag can't grant access) */
+  if (path === "/admin/overview") return await rpc("admin_overview", {});
+  if (path === "/admin/users") return await rpc("admin_users", {});
+  if (path.match(/^\/admin\/user\/.+\/earnings$/)) {
+    const id = path.split("/")[3];
+    return await rpc("admin_user_earnings", { p_target_id: id });
+  }
+  if (path.match(/^\/admin\/user\/.+\/block$/) && method === "POST") {
+    const id = path.split("/")[3];
+    return await rpc("admin_block_user", { p_target_id: id, p_block: !!body.block });
+  }
+  if (path === "/admin/tasks") return await rpc("admin_tasks", {});
+  if (path === "/admin/proofs") return await rpc("admin_proofs", {});
+  if (path === "/admin/deposits") return await rpc("admin_deposits", {});
+  if (path === "/admin/withdrawals") return await rpc("admin_withdrawals", {});
+  if (path.match(/^\/admin\/deposit\/.+\/review$/) && method === "POST") {
+    const id = path.split("/")[3];
+    return await rpc("admin_review_deposit", { p_deposit_id: id, p_approve: !!body.approve });
+  }
+  if (path.match(/^\/admin\/withdraw\/.+\/review$/) && method === "POST") {
+    const id = path.split("/")[3];
+    return await rpc("admin_review_withdrawal", { p_withdrawal_id: id, p_approve: !!body.approve });
+  }
+  if (path.match(/^\/admin\/proof\/.+\/review$/) && method === "POST") {
+    const id = path.split("/")[3];
+    return await rpc("admin_review_proof", { p_proof_id: id, p_approve: !!body.approve });
+  }
+  if (path.match(/^\/admin\/task\/.+\/toggle$/) && method === "POST") {
+    const id = path.split("/")[3];
+    return await rpc("admin_toggle_task", { p_task_id: id, p_active: !!body.active });
+  }
+  if (path === "/admin/coupon" && method === "POST") {
+    return await rpc("admin_create_coupon", { p_code: body.code, p_amount: Number(body.amount), p_max_uses: Number(body.max_uses) });
+  }
+  if (path === "/admin/settings" && method === "GET") return await rpc("admin_get_settings", {});
+  if (path === "/admin/settings/deposit-account" && method === "POST") {
+    return await rpc("admin_add_deposit_account", { p_method: body.method, p_number: body.number, p_title: body.title });
+  }
+  if (path.match(/^\/admin\/settings\/deposit-account\/\d+$/) && method === "DELETE") {
+    const idx = Number(path.split("/")[4]);
+    return await rpc("admin_del_deposit_account", { p_idx: idx });
+  }
+  if (path === "/admin/settings/withdrawal-method" && method === "POST") {
+    return await rpc("admin_add_withdrawal_method", { p_name: body.name });
+  }
+  if (path.match(/^\/admin\/settings\/withdrawal-method\/\d+$/) && method === "DELETE") {
+    const idx = Number(path.split("/")[4]);
+    return await rpc("admin_del_withdrawal_method", { p_idx: idx });
+  }
+  if (path === "/admin/settings/task-approval" && method === "POST") {
+    return await rpc("admin_save_task_approval", { p_on: !!body.on, p_message: body.message ?? null });
+  }
+  if (path === "/admin/settings/maintenance" && method === "POST") {
+    return await rpc("admin_save_maintenance", { p_on: !!body.on, p_message: body.message ?? null });
+  }
+  if (path === "/admin/settings/support-url" && method === "POST") {
+    return await rpc("admin_save_support_url", { p_url: body.url });
+  }
+
+  throw new Error("Unknown endpoint: " + path);
+};
+
+
+
+function pageIndex(){
+  redirectIfAuthed();
+  function stat(l,v){return `<div class="soft center" style="margin:0;padding:12px"><div class="bignum" style="font-size:18px">${v}</div><div class="muted">${l}</div></div>`}
+  function feat(e,t,d){return `<div class="soft" style="margin:0"><div class="emoji">${e}</div><b>${t}</b><div class="muted">${d}</div></div>`}
+  function view(d){
+    const s=(d&&d.stats)||{}, w=(d&&d.withdrawals)||[];
+    mount(`
+    <div class="topbar"><span class="brand">💰 EarnPkrauf</span>
+      <a href="#/login" class="pill btn-primary" style="width:auto">Login</a></div>
+    <div class="grad header-block center" style="padding:40px 24px">
+      <h1 style="font-size:30px;font-weight:800;line-height:1.2">Complete Tasks.<br>Earn Real Money.</h1>
+      <p style="opacity:.92;margin:14px 0 22px">Finish simple tasks, claim daily bonuses, invite friends and withdraw straight to JazzCash & EasyPaisa.</p>
+      <a href="#/register" class="btn btn-white" style="display:inline-block;width:auto;padding:14px 30px">Start Earning Free →</a>
+    </div>
+    <div class="grid3" style="margin:16px">
+      ${stat("Total Users", (s.totalUsers||0).toLocaleString())}
+      ${stat("Paid Out", rs(s.totalWithdrawals||0))}
+      ${stat("Earned", rs(s.totalEarnings||0))}
+    </div>
+    <div class="grid2" style="margin:16px">
+      ${feat("📋","Easy Tasks","Join, react, sign up & more")}
+      ${feat("🎁","Daily Bonus","Spin & streak rewards")}
+      ${feat("👥","Referrals","Earn for every friend")}
+      ${feat("⚡","Fast Payouts","JazzCash & EasyPaisa")}
+    </div>
+    <div class="card">
+      <h2 style="font-size:17px;margin-bottom:10px">🎉 Latest Withdrawals</h2>
+      ${w.length? w.map(x=>`<div class="list-item row"><div><b>${rs(x.amount)}</b><div class="muted">${x.name} • ${x.method}</div></div><span style="color:var(--green)">✓</span></div>`).join("")
+        : '<p class="muted">No withdrawals yet.</p>'}
+    </div>`);
+  }
+  api("/public/home").then(view).catch(()=>view(null));
+}
+
+function pageLogin(){
+  redirectIfAuthed();
+  mount(`
+    <div class="grad header-block center" style="padding:36px 24px"><h1 style="font-size:26px;font-weight:800">💰 EarnPkrauf</h1>
+      <p style="opacity:.9;margin-top:6px">Login to your account</p></div>
+    <div class="card">
+      <form id="f">
+        <label class="label">Email</label>
+        <input class="field" id="email" type="text" required placeholder="you@email.com" style="margin-bottom:12px">
+        <label class="label">Password</label>
+        <input class="field" id="pass" type="password" required placeholder="••••••" style="margin-bottom:16px">
+        <button class="btn btn-primary" id="btn">Login</button>
+      </form>
+      <p class="center muted" style="margin-top:14px">No account? <a href="#/register" style="color:var(--primary);font-weight:700">Create Account</a></p>
+    </div>`);
+  qs("#f").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const btn=qs("#btn"); btn.disabled=true; btn.textContent="Logging in…";
+    const emailVal=qs("#email").value.trim();
+    const passVal=qs("#pass").value;
+    try{
+      const r=await api("/auth/login",{method:"POST",body:{email:emailVal,password:passVal}});
+      location.hash="#/dashboard"; router();
+      if (r.user && r.user.is_admin) {
+        showWelcomePopup("Welcome back, Admin!", "You have full access to the admin panel — manage users, tasks, deposits & withdrawals.");
+      } else {
+        showWelcomePopup("Welcome back!", "Glad to see you again. Check your dashboard for new tasks and updates.");
+      }
+    }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="Login"; }
+  });
+}
+
+function pageRegister(){
+  redirectIfAuthed();
+  const ref=getParam("ref")||"";
+  mount(`
+    <div class="grad header-block center" style="padding:36px 24px"><h1 style="font-size:26px;font-weight:800">💰 EarnPkrauf</h1>
+      <p style="opacity:.9;margin-top:6px">Create your free account</p></div>
+    <div class="card">
+      <form id="f">
+        <label class="label">Full Name</label>
+        <input class="field" id="name" required placeholder="Your name" style="margin-bottom:12px">
+        <label class="label">Username</label>
+        <input class="field" id="username" required placeholder="e.g. raufch" style="margin-bottom:12px">
+        <label class="label">Phone Number</label>
+        <input class="field" id="phone" required placeholder="03XXXXXXXXX" style="margin-bottom:12px">
+        <label class="label">Email</label>
+        <input class="field" id="email" type="email" required placeholder="you@email.com" style="margin-bottom:12px">
+        <label class="label">Password</label>
+        <input class="field" id="pass" type="password" required minlength="6" placeholder="At least 6 characters" style="margin-bottom:12px">
+        <label class="label">Confirm Password</label>
+        <input class="field" id="pass2" type="password" required minlength="6" placeholder="Re-enter password" style="margin-bottom:12px">
+        <label class="label">Referral Code ${ref?"":"(optional)"}</label>
+        <input class="field" id="ref" value="${ref}" placeholder="ABC123" ${ref?'readonly style="margin-bottom:4px;background:var(--bg);color:var(--muted)"':'style="margin-bottom:16px"'}>
+        ${ref?`<p class="muted" style="font-size:11px;margin-bottom:16px">🔒 Referral code locked — applied automatically from your invite link.</p>`:""}
+        <button class="btn btn-primary" id="btn">Create Account</button>
+      </form>
+      <p class="center muted" style="margin-top:14px">Already have an account? <a href="#/login" style="color:var(--primary);font-weight:700">Login</a></p>
+    </div>`);
+  qs("#f").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    if(qs("#pass").value !== qs("#pass2").value){ toast("Passwords do not match"); return; }
+    const btn=qs("#btn"); btn.disabled=true; btn.textContent="Creating…";
+    try{
+      const r=await api("/auth/register",{method:"POST",body:{
+        name:qs("#name").value, username:qs("#username").value, phone:qs("#phone").value,
+        email:qs("#email").value, password:qs("#pass").value, ref:qs("#ref").value||null }});
+      location.hash="#/dashboard"; router();
+      showWelcomePopup("Welcome to EarnPkrauf! 🎉", "Your account is ready. Explore tasks, complete them, and start earning today!");
+    }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="Create Account"; }
+  });
+}
+
+function pageDashboard(){
+  if(!requireAuth()) return;
+  const ACTIONS=[
+    ["#/deposit","💳","Deposit","Add funds"],["#/withdraw","💰","Withdraw","Cash out"],
+    ["#/tasks","📋","Tasks","Earn money"],["#/create-task","➕","Create Task","Post job"],
+    ["#/proofs","📤","My Proofs","Submissions"],["#/manage","🛠️","Manage","Your tasks"],
+    ["#/coupon","🎁","Redeem Coupon","Bonus"],["#/streak","🔥","Streak","Daily reward"],
+    ["#/spin","🎡","Spin","Win rewards"],["#/invite","👥","Invite","Earn bonus"]];
+  function dstat(l,v){return `<div class="soft center" style="margin:0"><div class="muted">${l}</div><div class="bignum" style="font-size:20px">${v}</div></div>`}
+  function view(d, notif, settings){
+    const p=(d&&d.profile)||{}, w=(d&&d.withdrawals)||[];
+    const unseen=(notif&&notif.unseen)||0;
+    mount(`
+    <div class="grad header-block" style="padding:22px">
+      <div class="row"><p style="opacity:.9">Welcome Back 👋</p>
+        <span class="row" style="gap:8px">
+          <a href="#/notifications" class="pill" style="width:auto;position:relative;background:rgba(255,255,255,.2);color:#fff;padding:6px 12px;font-size:14px">🔔${unseen?'<span class="notif-dot"></span>':''}</a>
+          <a href="#/profile" class="pill" style="width:auto;background:rgba(255,255,255,.2);color:#fff;padding:6px 14px;font-size:12px">👤 My Profile</a>
+        </span></div>
+      <h1 style="font-size:26px;font-weight:800">${p.name||"User"}</h1>
+      <div style="margin-top:14px" class="grid2">
+        <div style="background:#fff;color:var(--text);border-radius:16px;padding:14px;text-align:center">
+          <div class="muted">💳 Deposit</div><div class="bignum" style="font-size:22px">${rs(p.deposit_balance)}</div></div>
+        <div style="background:#fff;color:var(--text);border-radius:16px;padding:14px;text-align:center">
+          <div class="muted">💰 Available</div><div class="bignum" style="font-size:22px">${rs(p.available_balance)}</div></div>
+      </div>
+    </div>
+    <div class="grid2" style="margin:12px 16px">
+      ${dstat("Total Earnings",rs(p.total_earnings))}${dstat("Completed",p.completed_tasks||0)}
+      ${dstat("Referrals",p.referrals_count||0)}${dstat("Pending",rs(p.pending_balance))}
+    </div>
+    <h2 style="margin:16px 16px 8px;font-size:19px">🚀 Quick Actions</h2>
+    <div class="grid2" style="margin:0 16px">
+      ${ACTIONS.map(([h,e,t,ds])=>`<a href="${h}" class="soft press" style="margin:0"><div class="emoji">${e}</div><b>${t}</b><div class="muted">${ds}</div></a>`).join("")}
+      <a href="#/vip" class="soft press" style="margin:0;grid-column:span 2"><div class="emoji">👑</div><b>VIP</b><div class="muted">Upgrade your account</div></a>
+    </div>
+    ${d&&d.isAdmin?`<a href="#/admin" class="card press row"><div><b>🛡️ Admin Panel</b><div class="muted">Manage deposits, withdrawals & proofs</div></div><span>→</span></a>`:""}
+    <div class="card"><h2 style="font-size:16px">💬 Support</h2><p class="muted">Need help? Contact support.</p>
+      <a href="${(settings&&settings.supportUrl)||EARNPKR_CONFIG.SUPPORT_URL}" target="_blank" class="pill btn-primary" style="margin-top:10px;width:auto">📞 Contact Support</a></div>
+    <div class="card"><h2 style="font-size:16px;margin-bottom:8px">🎉 Latest Withdrawals</h2>
+      ${w.length? w.slice(0,5).map(x=>`<div class="list-item"><b>${rs(x.amount)}</b><div class="muted">${x.name} • ${x.method}</div></div>`).join("")
+        : '<p class="muted">No withdrawals yet.</p>'}</div>
+    <div style="margin:16px"><button class="btn btn-danger" id="logout">🚪 Logout</button></div>
+    ${tabbar("#/dashboard")}`);
+    qs("#logout").onclick=logout;
+  }
+  Promise.all([api("/dashboard"), api("/notifications").catch(()=>({unseen:0})), api("/public/settings").catch(()=>null)]).then(([d,n,s])=>view(d,n,s))
+    .catch(err=>mount(errorBox(err.message)+`<div style="margin:16px"><button class="btn btn-danger" onclick="logout()">Logout</button></div>`));
+}
+
+/* Ad slot — drop your ad network's embed code (AdSense <ins>, Adsterra, etc.)
+   inside adSlot(). Each call renders one banner in its own card. */
+function adSlot(id){
+  return `<div class="soft center" style="margin:0 0 12px;padding:14px" data-ad-slot="${id}">
+    <div class="muted" style="font-size:10px;letter-spacing:.5px;margin-bottom:6px">ADVERTISEMENT</div>
+    <!-- TODO: paste ad network embed code here, e.g. Google AdSense <ins class="adsbygoogle"> tag -->
+    <div style="min-height:80px;display:flex;align-items:center;justify-content:center;border:1px dashed var(--border);border-radius:12px;color:var(--muted);font-size:12px">
+      Ad Banner (${id})
+    </div>
+  </div>`;
+}
+function pageTasks(){
+  if(!requireAuth()) return;
+  function view(list){
+    list=list||[];
+    const items=list.map((t,i)=>{
+      const card=`<div class="soft" style="margin:0 0 12px;padding:16px">
+        <div class="row"><b style="font-size:16px">${t.title}</b>${t.min_vip_level?`<span class="badge b-ok">👑 VIP ${t.min_vip_level}+</span>`:''}</div>
+        <div class="grid2" style="margin-top:12px;gap:10px">
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${rs(t.reward)}</div><span class="muted" style="font-size:11px">Reward / User</span></div>
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${t.slots_left}</div><span class="muted" style="font-size:11px">Slots Left</span></div>
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${t.completed_count}</div><span class="muted" style="font-size:11px">Completed</span></div>
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${t.total_slots}</div><span class="muted" style="font-size:11px">Total Users</span></div>
+        </div>
+        <a href="#/task?id=${t.id}" class="btn btn-primary" style="margin-top:14px">🚀 Start Task</a>
+      </div>`;
+      const ad = (i>0 && (i+1)%3===0) ? adSlot("tasks-inline-"+i) : "";
+      return card+ad;
+    }).join("");
+    mount(header({title:"Tasks",emoji:"📋",subtitle:"Complete tasks to earn money"})+
+    `<div style="padding:0 16px">${adSlot("tasks-top")}${list.length? items : errorBox("No tasks available right now.")}</div>`+tabbar("#/tasks"));
+  }
+  api("/tasks").then(view).catch(err=>mount(header({title:"Tasks",emoji:"📋"})+errorBox(err.message)+tabbar("#/tasks")));
+}
+
+function pageTask(){
+  if(!requireAuth()) return;
+  const id=getParam("id");
+  if(!id){ location.hash="#/tasks"; router(); return; }
+  const ONE_HOUR_MS = 60*60*1000;
+  let countdownTimer=null;
+
+  function infoBlock(t){
+    return `<div class="soft" style="padding:16px;margin-bottom:14px">
+        <b style="font-size:17px">${t.title}</b><div class="muted" style="font-size:12px">Task ID: #${t.id.slice(-6)}</div>
+        <div class="grid2" style="margin-top:12px;gap:10px">
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${rs(t.reward)}</div><span class="muted" style="font-size:11px">Reward</span></div>
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${t.slots_left}</div><span class="muted" style="font-size:11px">Slots Left</span></div>
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${t.completed_count}</div><span class="muted" style="font-size:11px">Completed Users</span></div>
+          <div style="background:var(--bg);border-radius:14px;padding:10px;text-align:center"><div class="bignum" style="font-size:17px">${t.total_slots}</div><span class="muted" style="font-size:11px">Total Users</span></div>
+        </div>
+      </div>
+      <div class="card"><h3 style="margin-bottom:6px">📝 Task Description</h3><p class="muted">${t.description||"—"}</p></div>
+      ${t.screenshots&&t.screenshots.length?`<div class="card"><h3 style="margin-bottom:10px">📷 Task Screenshots</h3>
+        <div class="row" style="flex-wrap:wrap;gap:8px">${t.screenshots.map(s=>`<img src="${s}" style="width:72px;height:72px;object-fit:cover;border-radius:10px">`).join("")}</div></div>`:""}
+      ${t.link?`<a href="${t.link}" target="_blank" class="btn btn-primary" style="margin:6px 0 14px;display:block">🔗 Open Task</a>`:""}`;
+  }
+
+  function view(t){
+    if (countdownTimer) { clearInterval(countdownTimer); countdownTimer=null; }
+
+    if (t.already_done) {
+      mount(header({title:"Task Details",emoji:"📋",subtitle:t.title,back:"#/tasks"})+
+      `<div style="padding:0 16px">${infoBlock(t)}
+        <div class="card center"><p class="muted">✅ Aap ye task pehle hi submit/complete kar chuke hain. "Tasks" tab me naye tasks dekhein.</p></div>
+      </div>`);
+      return;
+    }
+
+    const elapsed = t.started_at ? (Date.now()-t.started_at) : 0;
+    const expired = !!(t.started_at && elapsed > ONE_HOUR_MS);
+
+    let actionHtml;
+    if (!t.started_at) {
+      actionHtml = `<div class="card center">
+        <p class="muted" style="margin-bottom:10px">⏱️ Start karne ke baad aapke paas screenshot submit karne ke liye sirf <b>1 ghanta (60 minute)</b> hoga. Waqt khatam hone par ye task invalid ho jayega.</p>
+        <button class="btn btn-primary" id="startBtn">🚀 Start Task</button>
+      </div>`;
+    } else if (expired) {
+      actionHtml = `<div class="card center">
+        <div style="font-size:40px">⏰</div>
+        <p style="margin-top:8px;color:var(--red);font-weight:700">Waqt khatam! Ye task invalid ho gaya hai.</p>
+        <p class="muted" style="margin:6px 0 12px">1 ghante ke andar screenshot submit nahi hua. Dobara start karke try karein.</p>
+        <button class="btn btn-primary" id="restartBtn">🔄 Dobara Start Karein</button>
+      </div>`;
+    } else {
+      actionHtml = `<div class="card center">
+          <p class="muted">⏱️ Baaki waqt</p>
+          <div class="bignum" id="timerDisplay" style="font-size:26px">--:--</div>
+          <p class="muted" style="margin-top:6px;font-size:12px">Is waqt ke andar screenshot submit kar dein, warna task invalid ho jayega.</p>
+        </div>
+        <div class="card"><h3 style="margin-bottom:4px">📤 Upload Task Proof</h3>
+          <p class="muted" style="margin-bottom:10px">Upload up to 3 screenshots as proof.</p>
+          <form id="pf">
+            <input type="file" id="file" class="field" accept="image/*" multiple required style="margin-bottom:12px">
+            <button class="btn" style="background:#16a34a;color:#fff" id="btn">📤 Upload Proof</button>
+          </form>
+        </div>`;
+    }
+
+    mount(header({title:"Task Details",emoji:"📋",subtitle:t.title,back:"#/tasks"})+
+    `<div style="padding:0 16px">${infoBlock(t)}${actionHtml}</div>`);
+
+    if (!t.started_at) {
+      qs("#startBtn").addEventListener("click", async ()=>{
+        const b=qs("#startBtn"); b.disabled=true; b.textContent="Starting…";
+        try{ await api("/tasks/"+id+"/start",{method:"POST"}); load(); }
+        catch(err){ toast(err.message); b.disabled=false; b.textContent="🚀 Start Task"; }
+      });
+      return;
+    }
+    if (expired) {
+      qs("#restartBtn").addEventListener("click", async ()=>{
+        const b=qs("#restartBtn"); b.disabled=true; b.textContent="Starting…";
+        try{ await api("/tasks/"+id+"/start",{method:"POST"}); load(); }
+        catch(err){ toast(err.message); b.disabled=false; b.textContent="🔄 Dobara Start Karein"; }
+      });
+      return;
+    }
+
+    function tick(){
+      if (!location.hash.startsWith("#/task?id="+id) && location.hash !== "#/task") { clearInterval(countdownTimer); countdownTimer=null; return; }
+      const remain = ONE_HOUR_MS - (Date.now()-t.started_at);
+      if (remain <= 0) { load(); return; }
+      const mm=String(Math.floor(remain/60000)).padStart(2,"0");
+      const ss=String(Math.floor((remain%60000)/1000)).padStart(2,"0");
+      const el=qs("#timerDisplay"); if (el) el.textContent = mm+":"+ss;
+    }
+    tick();
+    countdownTimer = setInterval(tick, 1000);
+
+    qs("#pf").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const files=[...qs("#file").files].slice(0,3);
+      if(!files.length){toast("Choose at least one screenshot");return;}
+      const btn=qs("#btn"); btn.disabled=true; btn.textContent="Uploading…";
+      try{
+        const fd=new FormData();
+        files.forEach(f=>fd.append("proof", f));
+        await api("/tasks/"+id+"/proof",{method:"POST",form:fd});
+        if (countdownTimer) { clearInterval(countdownTimer); countdownTimer=null; }
+        toast("Proof submitted! Awaiting review.");
+        setTimeout(()=>{location.hash="#/proofs"; router();},800);
+      }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="📤 Upload Proof"; }
+    });
+  }
+  function load(){
+    api("/tasks/"+id).then(view).catch(err=>{ if(countdownTimer){clearInterval(countdownTimer);countdownTimer=null;} mount(header({title:"Task",emoji:"📋",back:"#/tasks"})+errorBox(err.message)); });
+  }
+  load();
+}
+
+function pageCreateTask(){
+  if(!requireAuth()) return;
+  loading();
+  api("/public/settings").then(settings=>{
+    const isAdminUser = isCurrentUserAdmin();
+    if (!isAdminUser && settings && settings.taskCreationApprovalRequired) {
+      mount(header({title:"Create User Task",emoji:"➕",back:"#/dashboard"})+
+        `<div class="card center" style="padding:30px 20px">
+          <div style="font-size:40px;margin-bottom:10px">📞</div>
+          <p>${settings.taskCreationApprovalMessage||"Please contact customer service to get approval before creating a task."}</p>
+          <a href="${settings.supportUrl||EARNPKR_CONFIG.SUPPORT_URL}" target="_blank" class="pill btn-primary" style="margin-top:16px;width:auto">📞 Contact Support</a>
+        </div>`);
+      return;
+    }
+    api("/dashboard").then(view).catch(err=>mount(header({title:"Create Task",emoji:"➕",back:"#/dashboard"})+errorBox(err.message)));
+  }).catch(err=>mount(header({title:"Create Task",emoji:"➕",back:"#/dashboard"})+errorBox(err.message)));
+  function view(d){
+    const depositBalance = (d&&d.profile&&d.profile.deposit_balance)||0;
+    const availBalance = (d&&d.profile&&d.profile.available_balance)||0;
+    mount(header({title:"Create User Task",emoji:"➕",subtitle:"Post a job for others to complete",back:"#/dashboard"})+
+    `<div class="card">
+      <div class="soft center" style="padding:12px;margin-bottom:14px"><span class="muted">Spendable Balance (Deposit + Earnings)</span><div class="bignum" style="font-size:20px">${rs(depositBalance+availBalance)}</div></div>
+      <form id="f">
+        <label class="label">Task Name</label><input class="field" id="title" required placeholder="e.g. Join Channel" style="margin-bottom:12px">
+        <label class="label">Task Description</label><textarea class="field" id="desc" rows="3" style="margin-bottom:12px"></textarea>
+        <label class="label">Task Link</label><input class="field" id="link" placeholder="https://example.com" style="margin-bottom:12px">
+        <label class="label">Total Users Needed</label><input class="field" type="number" id="slots" min="1" required value="0" style="margin-bottom:12px">
+        <label class="label">Reward Per User (Rs)</label><input class="field" type="number" id="reward" min="1" required value="0" style="margin-bottom:12px">
+        <label class="label">Who Can See This Task?</label>
+        <select class="field" id="minvip" style="margin-bottom:12px">
+          <option value="0">Everyone (Free + VIP)</option>
+          <option value="1">VIP Members Only</option>
+        </select>
+        <label class="label">Upload Screenshots (Maximum 5 Images)</label>
+        <input type="file" id="shots" class="field" accept="image/*" multiple style="margin-bottom:6px">
+        <p class="muted" style="font-size:11px;margin-bottom:14px">Maximum 5 images • JPG, PNG, WEBP • Max 2MB each</p>
+        <div class="soft" style="padding:14px;margin-bottom:14px">
+          <div class="row"><span>Task Amount</span><b id="amt">${rs(0)}</b></div>
+          <div class="row" style="margin-top:6px"><span>Platform Fee (10%)</span><b id="fee">${rs(0)}</b></div>
+          <hr style="border:none;border-top:1px solid var(--border);margin:10px 0">
+          <div class="row"><span style="color:var(--primary);font-weight:700">Total Amount</span><b class="bignum" id="total" style="font-size:18px">${rs(0)}</b></div>
+        </div>
+        <button class="btn btn-primary" id="btn">🚀 Create Task</button>
+      </form>
+    </div>`);
+    const upd=()=>{
+      const amt=(+qs("#reward").value||0)*(+qs("#slots").value||0);
+      const fee=Math.round(amt*0.10);
+      qs("#amt").textContent=rs(amt); qs("#fee").textContent=rs(fee); qs("#total").textContent=rs(amt+fee);
+    };
+    qs("#reward").oninput=upd; qs("#slots").oninput=upd;
+    qs("#f").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const btn=qs("#btn"); btn.disabled=true; btn.textContent="Creating…";
+      try{
+        const fd=new FormData();
+        [...(qs("#shots").files||[])].slice(0,5).forEach(f=>fd.append("screenshots", f));
+        await api("/tasks",{method:"POST", form: fd, body:{
+          title:qs("#title").value, description:qs("#desc").value, link:qs("#link").value||null,
+          reward:+qs("#reward").value, total_slots:+qs("#slots").value, min_vip_level:+qs("#minvip").value }});
+        toast("Task created!");
+        setTimeout(()=>{location.hash="#/manage"; router();},700);
+      }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="🚀 Create Task"; }
+    });
+  }
+}
+
+function pageProofs(){
+  if(!requireAuth()) return;
+  function badge(s){return s==="approved"?"b-ok":s==="rejected"?"b-no":"b-pending";}
+  function view(list){
+    list=list||[];
+    mount(header({title:"My Proofs",emoji:"📤",subtitle:"Your task submissions",back:"#/dashboard"})+
+    `<div style="padding:0 16px">${list.length? list.map(p=>`
+      <div class="soft row" style="margin:0 0 12px"><div><b>${p.task}</b><div class="muted">Reward ${rs(p.reward)}</div></div>
+      <span class="badge ${badge(p.status)}">${p.status}</span></div>`).join("") : errorBox("No submissions yet.")}</div>`);
+  }
+  api("/proofs").then(view).catch(err=>mount(header({title:"My Proofs",emoji:"📤",back:"#/dashboard"})+errorBox(err.message)));
+}
+
+function pageManage(){
+  if(!requireAuth()) return;
+  window.review=async function(proofId, approve){
+    try{
+      await api("/proofs/"+proofId+"/review",{method:"POST",body:{approve}});
+      toast(approve?"Approved ✓":"Rejected");
+      qs("#p-"+proofId)?.remove();
+    }catch(err){ toast(err.message); }
+  };
+  function view(d){
+    const proofs=(d&&d.proofs)||[];
+    mount(header({title:"Manage Tasks",emoji:"🛠️",subtitle:"Review proofs for your tasks",back:"#/dashboard"})+
+    `<div class="card"><h3 style="margin-bottom:10px">Pending Submissions</h3>
+      ${proofs.length? proofs.map(p=>`
+        <div class="list-item row" id="p-${p.id}">
+          <div><b>${p.user_name}</b> — ${p.task_title}
+            ${p.proof_url?`<div><a href="${p.proof_url}" target="_blank" style="color:var(--primary);font-size:12px">View proof</a></div>`:""}</div>
+          <span><button class="pill b-ok" style="border:none;cursor:pointer;margin-right:6px" onclick="review('${p.id}',true)">Approve</button>
+          <button class="pill b-no" style="border:none;cursor:pointer" onclick="review('${p.id}',false)">Reject</button></span></div>`).join("")
+        : '<p class="muted">No pending submissions.</p>'}
+    </div>`);
+  }
+  api("/manage").then(view).catch(err=>mount(header({title:"Manage Tasks",emoji:"🛠️",back:"#/dashboard"})+errorBox(err.message)));
+}
+
+function pageDeposit(){
+  if(!requireAuth()) return;
+  const C=EARNPKR_CONFIG;
+  async function render(){
+    const settings = await api("/public/settings");
+    const accounts = settings.depositAccounts||[];
+    const METHODS = settings.withdrawalMethods||["JazzCash","Easypaisa","Bank Transfer"];
+    let method=METHODS[0];
+    mount(header({title:"Deposit",emoji:"💳",subtitle:"Add funds to create tasks",back:"#/dashboard"})+
+    `<div class="card"><div style="background:var(--bg);border-radius:12px;padding:14px;font-size:13px">
+      <b>How to deposit</b>
+      ${accounts.length? `<div style="margin:8px 0">${accounts.map(a=>`<div style="padding:6px 0;border-bottom:1px solid var(--border)"><b>${a.method}:</b> ${a.number} <span class="muted">(${a.title})</span></div>`).join("")}</div>`
+        : `<p class="muted" style="margin:6px 0">No deposit accounts configured yet — contact support.</p>`}
+      <ol class="muted" style="padding-left:18px;margin:6px 0 0">
+      <li>Send money to one of the accounts above.</li>
+      <li>Submit the form below with your number, transaction ID & screenshot.</li>
+      <li>Funds added after admin approval.</li></ol></div></div>
+    <div class="card"><form id="f">
+      <label class="label">Amount (Rs)</label><input class="field" type="number" id="amt" min="${C.MIN_DEPOSIT}" required style="margin-bottom:12px">
+      <label class="label">Method</label><div class="grid3" id="methods" style="margin-bottom:12px">
+        ${METHODS.map((m,i)=>`<button type="button" class="method-btn ${i===0?'sel':''}" data-m="${m}">${m}</button>`).join("")}</div>
+      <label class="label">Your sending number</label><input class="field" id="num" required placeholder="03XXXXXXXXX" style="margin-bottom:12px">
+      <label class="label">Transaction ID</label><input class="field" id="ref" required placeholder="e.g. TXN123456" style="margin-bottom:12px">
+      <label class="label">Payment Screenshot</label>
+      <input type="file" id="shot" class="field" accept="image/*" required style="margin-bottom:12px">
+      <button class="btn btn-primary" id="btn">Submit Deposit Request</button>
+    </form></div>`);
+    qsa("#methods .method-btn").forEach(b=>b.onclick=()=>{qsa("#methods .method-btn").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");method=b.dataset.m;});
+    qs("#f").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const f=qs("#shot").files[0];
+      if(!f){ toast("Deposit screenshot is required"); return; }
+      const btn=qs("#btn"); btn.disabled=true; btn.textContent="Submitting…";
+      try{
+        const fd=new FormData(); fd.append("screenshot", f);
+        await api("/deposit",{method:"POST", form: fd, body:{
+        amount:+qs("#amt").value, method, sender_account:qs("#num").value, txn_ref:qs("#ref").value }});
+        toast("Deposit request submitted! Wait for approval.");
+        setTimeout(()=>{location.hash="#/dashboard"; router();},900);
+      }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="Submit Deposit Request"; }
+    });
+  }
+  render();
+}
+
+function pageWithdraw(){
+  if(!requireAuth()) return;
+  const C=EARNPKR_CONFIG;
+  function view(d, settings){
+    const p=(d&&d.profile)||{};
+    const METHODS = (settings&&settings.withdrawalMethods)||["JazzCash","Easypaisa","Bank Transfer"];
+    const avail=p.available_balance||0;
+    const rate=taxRateFor(p);
+    let method=p.payment_method||METHODS[0];
+    if(!METHODS.includes(method)) method=METHODS[0];
+    mount(header({title:"Withdraw",emoji:"💰",subtitle:"Cash out to JazzCash / EasyPaisa",back:"#/dashboard"})+
+    `<div class="card center"><div class="muted">Available Balance</div><div class="bignum">${rs(avail)}</div>
+      <div class="muted" style="margin-top:6px">${p.vip_level?'⭐ VIP tax: '+rate+'%':'Free plan tax: '+rate+'% (upgrade to VIP for only 4%!)'}</div></div>
+    <div class="soft" style="margin:0 16px 16px;padding:14px;font-size:13px">💳 نوٹ: Deposit کی گئی رقم صرف VIP خریدنے کے لیے استعمال ہو سکتی ہے، یہ رقم withdraw (نکالی) نہیں جا سکتی۔ صرف آپ کی available balance (earnings) ہی withdraw ہو سکتی ہے۔</div>
+    ${!p.payment_account_number?`<div class="soft" style="margin:0 16px 16px;padding:14px">⚠️ No payment account bound yet. <a href="#/profile" style="color:var(--primary);font-weight:700">Bind it in My Profile</a> so admin can verify your withdrawals faster.</div>`:''}
+    <div class="card"><form id="f">
+      <label class="label">Amount (Rs)</label><input class="field" type="number" id="amt" min="${C.MIN_WITHDRAW}" max="${avail}" required style="margin-bottom:12px">
+      <label class="label">Method</label><div class="grid3" id="methods" style="margin-bottom:12px">
+        ${METHODS.map((m)=>`<button type="button" class="method-btn ${m===method?'sel':''}" data-m="${m}">${m}</button>`).join("")}</div>
+      <label class="label">Account number</label><input class="field" id="num" required value="${p.payment_account_number||""}" placeholder="03XXXXXXXXX" style="margin-bottom:12px">
+      <div class="soft" style="padding:12px;margin-bottom:14px">
+        <div class="row"><span class="muted">You'll receive</span><b class="bignum" id="netamt" style="font-size:18px">${rs(0)}</b></div>
+        <div class="muted" style="font-size:11px" id="taxline">after ${rate}% platform tax</div>
+      </div>
+      <button class="btn btn-primary" id="btn">Submit Withdrawal</button>
+    </form></div>`);
+    let curMethod=method;
+    qsa("#methods .method-btn").forEach(b=>b.onclick=()=>{qsa("#methods .method-btn").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");curMethod=b.dataset.m;});
+    const upd=()=>{ const amt=+qs("#amt").value||0; const tax=Math.round(amt*rate/100); qs("#netamt").textContent=rs(amt-tax); qs("#taxline").textContent="after "+rate+"% platform tax (Rs "+tax+")"; };
+    qs("#amt").oninput=upd;
+    qs("#f").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const btn=qs("#btn"); btn.disabled=true; btn.textContent="Submitting…";
+      try{
+        const r=await api("/withdraw",{method:"POST",body:{
+          amount:+qs("#amt").value, method:curMethod, account_number:qs("#num").value }});
+        toast("Withdrawal submitted! You'll receive "+rs(r.net));
+        setTimeout(()=>{location.hash="#/dashboard"; router();},900);
+      }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="Submit Withdrawal"; }
+    });
+  }
+  Promise.all([api("/dashboard"), api("/public/settings")]).then(([d,s])=>view(d,s))
+    .catch(err=>mount(header({title:"Withdraw",emoji:"💰",back:"#/dashboard"})+errorBox(err.message)));
+}
+
+function pageVip(){
+  if(!requireAuth()) return;
+  window.buy=async function(level){
+    try{ await api("/vip/buy",{method:"POST",body:{level}}); toast("Upgraded to VIP "+level+" 🎉"); load2(); }
+    catch(err){ toast(err.message); }
+  };
+  async function load2(){
+    loading();
+    try{
+      const [d, plansRes] = await Promise.all([api("/dashboard"), api("/vip")]);
+      const cur=(d&&d.profile&&d.profile.vip_level)||0;
+      const plans=(plansRes&&plansRes.plans)||[];
+      const myPlan = plans.find(v=>v.level===cur);
+      mount(header({title:"VIP Membership",emoji:"👑",subtitle:"Upgrade for bigger rewards",back:"#/dashboard"})+
+      `<div class="card center"><div class="muted">Current Level</div><div class="bignum">${cur?("VIP "+cur):"Free"}</div></div>
+      ${cur && myPlan ? `<div class="card" style="border:2px solid var(--primary)">
+          <div class="row"><b style="font-size:18px">👑 Your VIP Package</b><span class="badge b-ok">Active</span></div>
+          <div class="muted" style="margin:4px 0 8px">${myPlan.referral_bonus||""}</div>
+          ${(myPlan.perks||[]).map(p=>`<div class="tag" style="margin:0 4px 4px 0">${p}</div>`).join("")}
+        </div>` : ''}
+      <div style="padding:0 16px">${plans.map(v=>`
+        <div class="soft" style="margin:0 0 12px">
+          <div class="row"><b style="font-size:18px">👑 VIP ${v.level}</b><div class="bignum" style="font-size:18px">${rs(v.price)}</div></div>
+          <div class="muted" style="margin:4px 0 8px">${v.referral_bonus||""}</div>
+          ${(v.perks||[]).map(p=>`<div class="tag" style="margin:0 4px 4px 0">${p}</div>`).join("")}
+          <button class="btn ${cur>=v.level?'':'btn-primary'}" style="margin-top:10px${cur>=v.level?';background:#ddd;color:#888':''}" ${cur>=v.level?'disabled':''} onclick="buy(${v.level})">${cur>=v.level?'Owned':'Buy VIP '+v.level}</button>
+        </div>`).join("")}</div>`);
+    }catch(err){ mount(header({title:"VIP",emoji:"👑",back:"#/dashboard"})+errorBox(err.message)); }
+  }
+  load2();
+}
+
+function pageSpin(){
+  if(!requireAuth()) return;
+  mount(header({title:"Spin & Win",emoji:"🎡",subtitle:"Din me sirf aik dafa spin karein",back:"#/dashboard"})+
+  `<div class="card center">
+    <div style="font-size:54px;line-height:1">🏍️</div>
+    <p class="muted" style="margin:6px 0 14px">Spin karke chhota sa inaam jeetne ka mauka paayen!</p>
+    <div class="spin-wheel" id="wheel">🎁</div>
+    <button class="btn btn-primary" id="btn" style="margin-top:20px">Spin Now</button>
+  </div>`);
+  qs("#btn").addEventListener("click", async ()=>{
+    const btn=qs("#btn"); btn.disabled=true; btn.textContent="Spinning…";
+    try{
+      const r=await api("/spin",{method:"POST"});
+      const reward=(r&&r.reward)||0;
+      qs("#wheel").style.transform=`rotate(${1440+Math.random()*360}deg)`;
+      setTimeout(()=>{
+        if (reward>0) toast("Mubarak ho! Aap ne "+rs(reward)+" jeet liye! 🎉");
+        else toast("Is baar koi inaam nahi mila. Kal phir try karein!");
+        btn.textContent="Kal wapas ayen";
+      },3100);
+    }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="Spin Now"; }
+  });
+}
+
+function pageStreak(){
+  if(!requireAuth()) return;
+  function view(profile){
+    profile = profile || {};
+    const streak = profile.streak||0;
+    const claimedToday = profile.last_streak_at === todayStr();
+    const boxes = [1,2,3,4,5,6,7].map(day=>{
+      const done = day <= streak;
+      return `<div class="soft center" style="margin:0;padding:10px 4px;${done?'background:#e4f7ec':''}">
+        <div style="font-size:18px">${done?'✅':'⬜'}</div>
+        <div class="muted" style="font-size:10px;margin-top:2px">Din ${day}</div>
+        <div style="font-size:11px;font-weight:700;color:${done?'var(--green)':'var(--muted)'}">${rs(day)}</div>
+      </div>`;
+    }).join("");
+    mount(header({title:"Daily Check-in",emoji:"🔥",subtitle:"Roz check-in karein, inaam barhta jayega",back:"#/dashboard"})+
+    `<div class="card center"><div style="font-size:56px">🔥</div>
+      <div class="bignum" style="margin-top:8px">Streak: ${streak} din</div>
+      <p class="muted" style="margin-top:4px">Din 1 = Rs 1, Din 2 = Rs 2 ... Din 7 = Rs 7, phir dobara Din 1 se shuru!</p>
+    </div>
+    <div class="card"><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">${boxes}</div></div>
+    <div class="card center">
+      ${claimedToday
+        ? `<p class="muted">✅ Aap aaj check-in kar chuke hain. Kal wapas ayen!</p>`
+        : `<button class="btn btn-primary" id="btn">Aaj Check-in Karein</button>`}
+    </div>`);
+    if (!claimedToday) {
+      qs("#btn").addEventListener("click", async ()=>{
+        const btn=qs("#btn"); btn.disabled=true; btn.textContent="Check-in ho raha hai…";
+        try{
+          const r=await api("/streak",{method:"POST"});
+          toast("Din "+(r.streak||"")+"! +"+rs(r.reward));
+          load();
+        }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="Aaj Check-in Karein"; }
+      });
+    }
+  }
+  function load(){ api("/dashboard").then(d=>view(d&&d.profile)).catch(()=>view(null)); }
+  load();
+}
+
+function pageCoupon(){
+  if(!requireAuth()) return;
+  mount(header({title:"Redeem Coupon",emoji:"🎁",subtitle:"Enter a code for bonus rewards",back:"#/dashboard"})+
+  `<div class="card"><form id="f">
+    <label class="label">Coupon Code</label>
+    <input class="field" id="code" placeholder="ENTER CODE" required style="text-transform:uppercase;margin-bottom:12px">
+    <button class="btn btn-primary" id="btn">Redeem</button>
+  </form></div>`);
+  qs("#f").addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const btn=qs("#btn"); btn.disabled=true; btn.textContent="Redeeming…";
+    try{
+      const r=await api("/coupon",{method:"POST",body:{code:qs("#code").value.trim().toUpperCase()}});
+      toast("Coupon redeemed! +"+rs(r.reward));
+      setTimeout(()=>{location.hash="#/dashboard"; router();},900);
+    }catch(err){ toast(err.message); btn.disabled=false; btn.textContent="Redeem"; }
+  });
+}
+
+function pageInvite(){
+  if(!requireAuth()) return;
+  function dstat(l,v){return `<div class="soft center" style="margin:0"><div class="muted">${l}</div><div class="bignum" style="font-size:20px">${v}</div></div>`}
+  function view(d){
+    const code=(d&&d.referral_code)||"—";
+    const count=(d&&d.referrals_count)||0;
+    const earnings=(d&&d.referral_earnings)||0;
+    const pending=(d&&d.pending_referral_bonus)||0;
+    const referred=(d&&d.referred_users)||[];
+    const link=location.href.split('#')[0]+"#/register?ref="+code;
+    mount(header({title:"Referral Center",emoji:"🎁",subtitle:"Invite friends and earn referral bonuses",back:"#/dashboard"})+
+    `<div class="card"><h3 style="margin-bottom:10px">Your Referral Link</h3>
+      <div style="background:var(--bg);border-radius:12px;padding:10px;margin-bottom:12px;font-size:12px;word-break:break-all">${link}</div>
+      <button class="btn btn-primary" id="copy">📋 Copy Referral Link</button></div>
+    <h3 style="margin:18px 16px 10px">Your Referral Statistics</h3>
+    <div class="grid2" style="margin:0 16px 16px">
+      ${dstat("Total Invites",count)}${dstat("Referral Earnings",rs(earnings))}</div>
+    <div class="card" style="border:2px solid var(--primary)">
+      <h3 style="margin-bottom:10px">🎯 Pending Bonus</h3>
+      <div class="soft center" style="padding:14px;margin-bottom:12px"><div class="muted">Ready to claim</div><div class="bignum" style="font-size:26px">${rs(pending)}</div></div>
+      <button class="btn ${pending>0?'btn-primary':''}" id="claim" ${pending>0?'':'disabled'} style="${pending>0?'':'background:#ddd;color:#888'}">${pending>0?'✅ Claim Now':'Nothing to claim yet'}</button>
+      <p class="muted" style="margin-top:10px;font-size:12px">Bonus keeps building up automatically — nothing is added to your withdrawable balance until you tap Claim.</p>
+    </div>
+    <div class="card"><h3 style="margin-bottom:10px">🎁 Referral Bonus Rules</h3>
+      <div style="background:var(--bg);border-radius:12px;padding:14px;font-size:14px;line-height:1.7">
+        ✅ Invite your friends using your referral link.<br>
+        ✅ For every <b>6 approved tasks</b> a referred user completes, Rs 20 is added to your Pending Bonus above.<br>
+        👆 You must manually tap <b>Claim Now</b> to receive it — until then it just keeps stacking up.<br>
+        💰 Once claimed, the money is yours: withdraw it or use it to create tasks.
+      </div></div>
+    <div class="card" style="border:1px solid #f87171;background:#fef2f2">
+      <p style="color:#b91c1c;font-size:13px;margin:0">⚠️ Fake or duplicate accounts will be detected — accounts found doing this will be blocked.</p>
+    </div>
+    <div class="card"><h3 style="margin-bottom:10px">👥 Referred Users</h3>
+      ${referred.length ? referred.map(r=>`<div class="row" style="padding:8px 0;border-bottom:1px solid var(--border)">
+        <span>${r.name}</span><span class="muted" style="font-size:12px">${r.completed_tasks} tasks done</span></div>`).join("")
+      : `<div class="center muted" style="padding:20px 0">📭 No referred users yet.<br>Share your referral link and start earning!</div>`}
+    </div>`);
+    qs("#copy").onclick=()=>{ navigator.clipboard?.writeText(link); toast("Referral link copied!"); };
+    const claimBtn=qs("#claim");
+    if (claimBtn && pending>0) claimBtn.onclick=async ()=>{
+      claimBtn.disabled=true; claimBtn.textContent="Claiming…";
+      try{ const r=await api("/invite/claim",{method:"POST"}); toast("🎉 Rs "+rs(r.amount)+" claimed!"); view(await api("/invite")); }
+      catch(err){ toast(err.message); claimBtn.disabled=false; claimBtn.textContent="✅ Claim Now"; }
+    };
+  }
+  api("/invite").then(view).catch(err=>mount(header({title:"Invite",emoji:"👥",back:"#/dashboard"})+errorBox(err.message)));
+}
+
+function pageProfile(){
+  if(!requireAuth()) return;
+  function view(d, settings){
+    const p=(d&&d.profile)||{};
+    const METHODS = (settings&&settings.withdrawalMethods)||["JazzCash","Easypaisa","Bank Transfer"];
+    let method=p.payment_method||"";
+    mount(header({title:"My Profile",emoji:"👤",subtitle:"Manage your personal information",back:"#/dashboard"})+
+    `<div class="card"><h3 style="margin-bottom:12px">Personal Information</h3>
+      <form id="f">
+        <label class="label">Full Name</label>
+        <input class="field" id="name" value="${p.name||""}" required style="margin-bottom:12px">
+        <label class="label">Email Address</label>
+        <input class="field" id="email" value="${p.email||""}" disabled style="margin-bottom:12px;background:var(--bg)">
+        <label class="label">Phone Number</label>
+        <input class="field" id="phone" value="${p.phone||""}" placeholder="03XXXXXXXXX" style="margin-bottom:12px">
+        <label class="label">Username</label>
+        <input class="field" id="username" value="${p.username||""}" style="margin-bottom:12px">
+        <label class="label">Referral Code</label>
+        <input class="field" id="refcode" value="${p.referral_code||""}" disabled style="margin-bottom:16px;background:var(--bg)">
+        <button class="btn btn-primary" id="btn">💾 Save Changes</button>
+      </form></div>
+    <div class="card"><h3 style="margin-bottom:6px">🏦 Bind Payment Account</h3>
+      <p class="muted" style="margin-bottom:12px">Bind your account once so withdrawals are verified & processed faster.</p>
+      <form id="pf">
+        <label class="label">Method</label><div class="grid3" id="methods" style="margin-bottom:12px">
+          ${METHODS.map(m=>`<button type="button" class="method-btn ${m===method?'sel':''}" data-m="${m}">${m}</button>`).join("")}</div>
+        <label class="label">Account Number</label>
+        <input class="field" id="pnum" value="${p.payment_account_number||""}" placeholder="03XXXXXXXXX" style="margin-bottom:12px">
+        <label class="label">Account Title</label>
+        <input class="field" id="ptitle" value="${p.payment_account_title||""}" placeholder="Full name on the account" style="margin-bottom:16px">
+        <button class="btn" style="background:#16a34a;color:#fff" id="pbtn">🏦 Save Payment Account</button>
+      </form></div>`);
+    qs("#f").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const btn=qs("#btn"); btn.disabled=true; btn.textContent="Saving…";
+      try{
+        await api("/profile",{method:"POST",body:{ name:qs("#name").value, phone:qs("#phone").value, username:qs("#username").value }});
+        toast("Profile updated ✓");
+      }catch(err){ toast(err.message); }
+      btn.disabled=false; btn.textContent="💾 Save Changes";
+    });
+    qsa("#methods .method-btn").forEach(b=>b.onclick=()=>{qsa("#methods .method-btn").forEach(x=>x.classList.remove("sel"));b.classList.add("sel");method=b.dataset.m;});
+    qs("#pf").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      if(!method){toast("Choose a payment method");return;}
+      const btn=qs("#pbtn"); btn.disabled=true; btn.textContent="Saving…";
+      try{
+        await api("/profile",{method:"POST",body:{ payment_method:method, payment_account_number:qs("#pnum").value, payment_account_title:qs("#ptitle").value }});
+        toast("Payment account saved ✓");
+      }catch(err){ toast(err.message); }
+      btn.disabled=false; btn.textContent="🏦 Save Payment Account";
+    });
+  }
+  Promise.all([api("/dashboard"), api("/public/settings")]).then(([d,s])=>view(d,s))
+    .catch(err=>mount(header({title:"My Profile",emoji:"👤",back:"#/dashboard"})+errorBox(err.message)));
+}
+
+function pageNotifications(){
+  if(!requireAuth()) return;
+  function view(d){
+    const list=(d&&d.notifications)||[];
+    mount(header({title:"Notifications",emoji:"🔔",subtitle:"Updates on your tasks & payments",back:"#/dashboard"})+
+    `<div style="padding:0 16px">${list.length?list.map(n=>`
+      <div class="soft" style="margin:0 0 10px;padding:14px;${n.seen?'':'border-left:4px solid var(--primary)'}">
+        <div>${n.text}</div><div class="muted" style="font-size:11px;margin-top:4px">${fmtDate(n.created_at)}</div>
+      </div>`).join(""):errorBox("No notifications yet.")}</div>`);
+    api("/notifications/seen",{method:"POST"}).catch(()=>{});
+  }
+  api("/notifications").then(view).catch(err=>mount(header({title:"Notifications",emoji:"🔔",back:"#/dashboard"})+errorBox(err.message)));
+}
+
+function pageAdmin(){
+  if(!requireAuth()) return;
+  const TABS=[["overview","📊","Overview"],["users","👥","Users"],["tasks","📋","Tasks"],
+    ["proofs","📤","Proofs"],["dep","💳","Deposits"],["wd","💰","Withdrawals"],["coupon","🎁","Coupons"],["settings","⚙️","Settings"]];
+  let active="overview";
+
+  function tabsBar(){
+    return `<div class="a-tabs">${TABS.map(([k,e,l])=>
+      `<button class="${active===k?'active':''}" onclick="adminSetTab('${k}')">${e} ${l}</button>`).join("")}</div>`;
+  }
+  window.adminSetTab=function(k){ active=k; render(); };
+
+  window.adminAct=async function(type,id,approve){
+    try{
+      const map={dep:"/admin/deposit/",wd:"/admin/withdraw/",proof:"/admin/proof/"};
+      await api(map[type]+id+"/review",{method:"POST",body:{approve}});
+      toast(approve?"Approved ✓":"Rejected");
+      render();
+    }catch(err){ toast(err.message); }
+  };
+
+  function kpi(l,v){return `<div class="soft center"><div class="muted">${l}</div><div class="bignum" style="font-size:19px">${v}</div></div>`;}
+  function fmtDate(s){ if(!s) return "—"; const d=new Date(s); return isNaN(d)?String(s):d.toLocaleDateString(); }
+  function shell(inner){
+    return header({title:"Admin Panel",emoji:"🛡️",subtitle:"Manage platform operations",back:"#/dashboard"})+tabsBar()+`<div style="margin-top:8px">${inner}</div>`;
+  }
+  function loadingInto(){ mount(shell('<div class="spinner"></div>')); }
+
+  async function panelOverview(){
+    loadingInto();
+    try{
+      const o=await api("/admin/overview");
+      mount(shell(`
+      <div class="kpi">
+        ${kpi("Total Users",(o.totalUsers||0).toLocaleString())}
+        ${kpi("Total Tasks",(o.totalTasks||0).toLocaleString())}
+        ${kpi("Total Task Value",rs(o.totalTaskValue||0))}
+        ${kpi("Total Paid Out",rs(o.totalPaidOut||0))}
+        ${kpi("Pending Deposits",(o.pendingDeposits||0)+" • "+rs(o.pendingDepositsAmount||0))}
+        ${kpi("Pending Withdrawals",(o.pendingWithdrawals||0)+" • "+rs(o.pendingWithdrawalsAmount||0))}
+        ${kpi("Pending Proofs",(o.pendingProofs||0).toLocaleString())}
+        ${kpi("VIP Members",(o.vipMembers||0).toLocaleString())}
+      </div>`));
+    }catch(err){ mount(shell(errorBox(err.message))); }
+  }
+  window.adminBlock=async function(id, block){
+    try{ await api("/admin/user/"+id+"/block",{method:"POST",body:{block}}); toast(block?"User blocked":"User unblocked"); panelUsers(); }
+    catch(err){ toast(err.message); }
+  };
+  window.adminViewEarnings=async function(id){
+    try{
+      const e = await api("/admin/user/"+id+"/earnings");
+      const b = e.breakdown||{}, c = e.counts||{};
+      const row=(l,v,n)=>`<div class="row" style="padding:6px 0;border-bottom:1px solid var(--border)"><span>${l} <span class="muted" style="font-size:11px">(${n})</span></span><b>${rs(v)}</b></div>`;
+      const el=document.createElement("div");
+      el.className="modal-overlay";
+      el.innerHTML=`<div class="modal-box" style="text-align:left">
+        <h2 style="margin-bottom:2px">📊 ${e.name}</h2>
+        <p class="muted" style="margin-bottom:14px">${e.email}</p>
+        ${row("📋 Task rewards", b.taskEarnings||0, c.tasksCompleted||0)}
+        ${row("🎁 Coupon redeems", b.couponEarnings||0, c.couponsRedeemed||0)}
+        ${row("🎡 Spin wins", b.spinEarnings||0, c.spinsPlayed||0)}
+        ${row("🔥 Check-in rewards", b.checkinEarnings||0, c.checkinsDone||0)}
+        <div class="row" style="padding-top:10px"><b>Total Earnings</b><b class="bignum" style="font-size:18px">${rs(e.total_earnings||0)}</b></div>
+        <button class="btn btn-primary" id="ve-close" style="margin-top:16px">Close</button>
+      </div>`;
+      document.body.appendChild(el);
+      el.querySelector("#ve-close").onclick=()=>el.remove();
+    }catch(err){ toast(err.message); }
+  };
+  async function panelUsers(){
+    loadingInto();
+    try{
+      const list=await api("/admin/users");
+      mount(shell(`<div class="card">
+        <div class="row" style="margin-bottom:6px"><h3>All Users</h3><span class="muted">${(list||[]).length} total</span></div>
+        ${(list&&list.length)? list.map(u=>`
+          <div class="u-row">
+            <div class="row"><b>${u.name}</b><span class="muted">${u.vip_level?("👑 VIP "+u.vip_level):"Free"}${u.is_blocked?' <span class="badge b-no">BLOCKED</span>':''}</span></div>
+            <div class="muted">${u.email}</div>
+            <div class="tags">
+              <span class="tag">✅ ${u.completed_tasks||0} tasks done</span>
+              <span class="tag">💰 ${rs(u.total_earnings||0)} earned</span>
+              <span class="tag">💳 ${rs(u.deposit_balance||0)} deposit</span>
+              <span class="tag">👛 ${rs(u.available_balance||0)} available</span>
+              <span class="tag">👥 ${u.referrals_count||0} referrals</span>
+              <span class="tag">🔥 streak ${u.streak||0}</span>
+              ${u.payment_method?`<span class="tag">🏦 ${u.payment_method}: ${u.payment_account_number} (${u.payment_account_title||"—"})</span>`:''}
+            </div>
+            <div class="muted" style="margin-top:4px;font-size:11px">Joined ${fmtDate(u.created_at)}</div>
+            <div class="row" style="margin-top:8px;gap:8px">
+              <button class="pill" style="border:none;cursor:pointer;background:#e8f0ff;color:var(--primary)" onclick="adminViewEarnings('${u.id}')">📊 Earnings Breakdown</button>
+              ${u.id!=="admin-master"?`<button class="pill ${u.is_blocked?'b-ok':'b-no'}" style="border:none;cursor:pointer" onclick="adminBlock('${u.id}',${!u.is_blocked})">${u.is_blocked?'✓ Unblock User':'🚫 Block User'}</button>`:''}
+            </div>
+          </div>`).join("") : '<p class="muted">No users yet.</p>'}
+      </div>`));
+    }catch(err){ mount(shell(errorBox(err.message))); }
+  }
+  window.adminToggleTask=async function(id, active){
+    try{ await api("/admin/task/"+id+"/toggle",{method:"POST",body:{active}}); toast(active?"Task activated":"Task deactivated"); panelTasks(); }
+    catch(err){ toast(err.message); }
+  };
+  async function panelTasks(){
+    loadingInto();
+    try{
+      const list=await api("/admin/tasks");
+      mount(shell(`<div class="card">
+        <div class="row" style="margin-bottom:6px"><h3>All Tasks</h3><span class="muted">${(list||[]).length} total</span></div>
+        ${(list&&list.length)? list.map(t=>{
+          const total=t.total_slots||0, left=t.slots_left??0;
+          const value=(t.reward||0)*total, spent=(t.reward||0)*(t.completed_count||0);
+          return `<div class="u-row">
+            <div class="row"><b>${t.title}</b><span class="badge ${t.active===false?'b-no':'b-ok'}">${t.active===false?'inactive':'active'}</span></div>
+            <div class="muted">by ${t.created_by_name||"—"} • ${fmtDate(t.created_at)}</div>
+            <div class="tags">
+              <span class="tag">💵 ${rs(t.reward)} / slot</span>
+              <span class="tag">🎟️ ${t.completed_count||0}/${total} done (${left} left)</span>
+              <span class="tag">📦 ${rs(value)} total value</span>
+              <span class="tag">💸 ${rs(spent)} paid out</span>
+              <span class="tag">${t.min_vip_level?("👑 VIP "+t.min_vip_level+"+ only"):"🌐 Everyone"}</span>
+            </div>
+            <button class="pill ${t.active===false?'b-ok':'b-no'}" style="border:none;cursor:pointer;margin-top:8px" onclick="adminToggleTask('${t.id}',${t.active===false})">${t.active===false?'✓ Activate':'⏸ Deactivate'}</button>
+          </div>`;}).join("") : '<p class="muted">No tasks yet.</p>'}
+      </div>`));
+    }catch(err){ mount(shell(errorBox(err.message))); }
+  }
+  async function panelProofs(){
+    loadingInto();
+    try{
+      const d=await api("/admin/proofs");
+      const pr=(d&&d.proofs)||[];
+      mount(shell(`<div class="card"><h3 style="margin-bottom:10px">📤 Pending Proof Screenshots</h3>
+        ${pr.length? pr.map(x=>`
+          <div class="list-item" id="proof-${x.id}">
+            <div class="row"><b>${x.user_name}</b><span class="muted">${rs(x.reward)}</span></div>
+            <div class="muted">${x.task_title}</div>
+            ${x.proof_url?`<a href="${x.proof_url}" target="_blank"><img class="proof-shot" src="${x.proof_url}" alt="proof screenshot" loading="lazy"></a>`:'<p class="muted">No screenshot attached.</p>'}
+            <div class="row" style="margin-top:6px">
+              <button class="pill b-ok" style="border:none;cursor:pointer;margin-right:6px" onclick="adminAct('proof','${x.id}',true)">✓ Approve</button>
+              <button class="pill b-no" style="border:none;cursor:pointer" onclick="adminAct('proof','${x.id}',false)">✕ Reject</button>
+            </div>
+          </div>`).join("") : '<p class="muted">No pending proofs.</p>'}
+      </div>`));
+    }catch(err){ mount(shell(errorBox(err.message))); }
+  }
+  async function panelDep(){
+    loadingInto();
+    try{
+      const d=await api("/admin/deposits");
+      const dep=(d&&d.deposits)||[];
+      mount(shell(`<div class="card"><h3 style="margin-bottom:10px">💳 Pending Deposits</h3>
+        ${dep.length?dep.map(x=>`
+          <div class="list-item" id="dep-${x.id}">
+            <div class="row"><b>${x.user_name}</b><span class="muted">${rs(x.amount)}</span></div>
+            <div class="muted">${x.method} • from ${x.account_number} • Txn ID: ${x.txn_ref||"—"}</div>
+            ${x.screenshot?`<a href="${x.screenshot}" target="_blank"><img class="proof-shot" src="${x.screenshot}" alt="deposit screenshot" loading="lazy"></a>`:'<p class="muted">No screenshot attached.</p>'}
+            <div class="row" style="margin-top:6px">
+              <button class="pill b-ok" style="border:none;cursor:pointer;margin-right:6px" onclick="adminAct('dep','${x.id}',true)">✓ Approve</button>
+              <button class="pill b-no" style="border:none;cursor:pointer" onclick="adminAct('dep','${x.id}',false)">✕ Reject</button>
+            </div>
+          </div>`).join(""):'<p class="muted">None</p>'}</div>`));
+    }catch(err){ mount(shell(errorBox(err.message))); }
+  }
+  async function panelWd(){
+    loadingInto();
+    try{
+      const d=await api("/admin/withdrawals");
+      const wd=(d&&d.withdrawals)||[];
+      mount(shell(`<div class="card"><h3 style="margin-bottom:10px">💰 Pending Withdrawals</h3>
+        ${wd.length?wd.map(x=>`
+          <div class="list-item" id="wd-${x.id}">
+            <div class="row"><b>${x.user_name}</b>${x.is_vip?'<span class="badge b-ok">⭐ VIP Priority</span>':''}</div>
+            <div class="tags" style="margin-top:6px">
+              <span class="tag">Requested: ${rs(x.amount)}</span>
+              <span class="tag">Tax: ${rs(x.tax)}</span>
+              <span class="tag">💸 Pay: ${rs(x.net_amount)}</span>
+            </div>
+            <div class="muted" style="margin-top:6px">Form entry: ${x.method} • ${x.account_number}</div>
+            ${x.bound_method?`<div class="muted" style="font-size:12px">Registered account: ${x.bound_method} • ${x.bound_account} (${x.bound_title||"—"}) ${x.bound_account===x.account_number?'✅ matches':'⚠️ different!'}</div>`
+              :`<div class="muted" style="font-size:12px">⚠️ No bound account on file — verify manually.</div>`}
+            <div class="row" style="margin-top:8px">
+              <button class="pill b-ok" style="border:none;cursor:pointer;margin-right:6px" onclick="adminAct('wd','${x.id}',true)">✓ Approve</button>
+              <button class="pill b-no" style="border:none;cursor:pointer" onclick="adminAct('wd','${x.id}',false)">✕ Reject</button>
+            </div>
+          </div>`).join(""):'<p class="muted">None</p>'}</div>`));
+    }catch(err){ mount(shell(errorBox(err.message))); }
+  }
+  function panelCoupon(){
+    mount(shell(`<div class="card"><h3 style="margin-bottom:10px">🎁 Create Coupon</h3>
+      <form id="cf">
+        <label class="label">Code</label><input class="field" id="c-code" placeholder="CODE" required style="margin-bottom:10px">
+        <label class="label">Amount (Rs)</label><input class="field" id="c-amt" type="number" required style="margin-bottom:10px">
+        <label class="label">Max uses</label><input class="field" id="c-max" type="number" value="100" style="margin-bottom:12px">
+        <button class="btn btn-primary" id="c-btn">Create Coupon</button>
+      </form></div>`));
+    qs("#cf").addEventListener("submit", async (e)=>{
+      e.preventDefault();
+      const b=qs("#c-btn"); b.disabled=true; b.textContent="Creating…";
+      try{
+        await api("/admin/coupon",{method:"POST",body:{code:qs("#c-code").value.toUpperCase(),amount:+qs("#c-amt").value,max_uses:+qs("#c-max").value}});
+        toast("Coupon created ✓"); qs("#c-code").value=""; qs("#c-amt").value="";
+      }catch(err){ toast(err.message); }
+      b.disabled=false; b.textContent="Create Coupon";
+    });
+  }
+
+  window.adminAddDeposit=async function(){
+    const method=qs("#s-dep-method").value, number=qs("#s-dep-num").value, title=qs("#s-dep-title").value;
+    if(!number||!title){toast("Fill account number & title");return;}
+    try{ await api("/admin/settings/deposit-account",{method:"POST",body:{method,number,title}}); toast("Added ✓"); panelSettings(); }
+    catch(err){ toast(err.message); }
+  };
+  window.adminDelDeposit=async function(idx){
+    try{ await api("/admin/settings/deposit-account/"+idx,{method:"DELETE"}); toast("Removed"); panelSettings(); }
+    catch(err){ toast(err.message); }
+  };
+  window.adminAddWdMethod=async function(){
+    const name=qs("#s-wd-name").value.trim();
+    if(!name){toast("Enter a method name");return;}
+    try{ await api("/admin/settings/withdrawal-method",{method:"POST",body:{name}}); toast("Added ✓"); panelSettings(); }
+    catch(err){ toast(err.message); }
+  };
+  window.adminDelWdMethod=async function(idx){
+    try{ await api("/admin/settings/withdrawal-method/"+idx,{method:"DELETE"}); toast("Removed"); panelSettings(); }
+    catch(err){ toast(err.message); }
+  };
+  window.adminSaveTaskApproval=async function(){
+    const on=qs("#s-task-approval-on").checked, message=qs("#s-task-approval-msg").value;
+    try{ await api("/admin/settings/task-approval",{method:"POST",body:{on,message}}); toast(on?"Task approval requirement ON":"Task approval requirement OFF"); panelSettings(); }
+    catch(err){ toast(err.message); }
+  };
+  window.adminSaveMaintenance=async function(){
+    const on=qs("#s-maint-on").checked, message=qs("#s-maint-msg").value;
+    try{ await api("/admin/settings/maintenance",{method:"POST",body:{on,message}}); toast(on?"Maintenance mode ON":"Maintenance mode OFF"); panelSettings(); }
+    catch(err){ toast(err.message); }
+  };
+  window.adminSaveSupportUrl=async function(){
+    const url=qs("#s-support-url").value.trim();
+    try{ await api("/admin/settings/support-url",{method:"POST",body:{url}}); toast("Support link saved"); panelSettings(); }
+    catch(err){ toast(err.message); }
+  };
+  async function panelSettings(){
+    loadingInto();
+    try{
+      const s=await api("/admin/settings");
+      mount(shell(`
+        <div class="card"><h3 style="margin-bottom:10px">💳 Deposit Accounts</h3>
+          <p class="muted" style="margin-bottom:10px">Accounts users see on the Deposit page.</p>
+          ${(s.depositAccounts||[]).map((a,i)=>`<div class="list-item row"><span><b>${a.method}</b> — ${a.number} <span class="muted">(${a.title})</span></span>
+            <button class="pill b-no" style="border:none;cursor:pointer" onclick="adminDelDeposit(${i})">✕ Remove</button></div>`).join("")}
+          <div class="grid3" style="margin-top:12px;gap:8px">
+            <input class="field" id="s-dep-method" placeholder="Method (e.g. JazzCash)">
+            <input class="field" id="s-dep-num" placeholder="Account number">
+            <input class="field" id="s-dep-title" placeholder="Account title"></div>
+          <button class="btn btn-primary" style="margin-top:10px" onclick="adminAddDeposit()">+ Add Deposit Account</button>
+        </div>
+        <div class="card"><h3 style="margin-bottom:10px">💰 Withdrawal Methods</h3>
+          <p class="muted" style="margin-bottom:10px">Methods users can choose when withdrawing / binding their account.</p>
+          ${(s.withdrawalMethods||[]).map((m,i)=>`<div class="list-item row"><span>${m}</span>
+            <button class="pill b-no" style="border:none;cursor:pointer" onclick="adminDelWdMethod(${i})">✕ Remove</button></div>`).join("")}
+          <div class="row" style="margin-top:12px;gap:8px">
+            <input class="field" id="s-wd-name" placeholder="e.g. Bank Alfalah" style="flex:1">
+            <button class="btn btn-primary" style="width:auto;padding:0 16px" onclick="adminAddWdMethod()">+ Add</button></div>
+        </div>
+        <div class="card"><h3 style="margin-bottom:10px">📞 Support Link</h3>
+          <p class="muted" style="margin-bottom:10px">The Telegram (or any) link users are sent to when they tap "Contact Support".</p>
+          <input class="field" id="s-support-url" value="${s.supportUrl||""}" placeholder="https://t.me/yourchannel" style="margin-bottom:12px">
+          <button class="btn" style="background:#0088cc;color:#fff" onclick="adminSaveSupportUrl()">💾 Save Support Link</button>
+        </div>
+        <div class="card"><h3 style="margin-bottom:10px">➕ Create Task Approval</h3>
+          <p class="muted" style="margin-bottom:10px">When ON, users see a message asking them to contact customer service instead of the Create Task form.</p>
+          <label class="row" style="margin-bottom:12px;cursor:pointer">
+            <span>Approval requirement is currently <b>${s.taskCreationApprovalRequired?"ON":"OFF"}</b></span>
+            <input type="checkbox" id="s-task-approval-on" ${s.taskCreationApprovalRequired?"checked":""} style="width:22px;height:22px"></label>
+          <label class="label">Message shown to users</label>
+          <textarea class="field" id="s-task-approval-msg" rows="2" style="margin-bottom:12px">${s.taskCreationApprovalMessage||""}</textarea>
+          <button class="btn" style="background:#f59e0b;color:#fff" onclick="adminSaveTaskApproval()">💾 Save Task Approval Settings</button>
+        </div>
+        <div class="card"><h3 style="margin-bottom:10px">🛠️ Maintenance Mode</h3>
+          <p class="muted" style="margin-bottom:10px">When ON, regular users see a maintenance page instead of the app. Admin login still works.</p>
+          <label class="row" style="margin-bottom:12px;cursor:pointer">
+            <span>Maintenance mode is currently <b>${s.maintenanceMode?"ON":"OFF"}</b></span>
+            <input type="checkbox" id="s-maint-on" ${s.maintenanceMode?"checked":""} style="width:22px;height:22px"></label>
+          <label class="label">Message shown to users</label>
+          <textarea class="field" id="s-maint-msg" rows="2" style="margin-bottom:12px">${s.maintenanceMessage||""}</textarea>
+          <button class="btn" style="background:#f59e0b;color:#fff" onclick="adminSaveMaintenance()">💾 Save Maintenance Settings</button>
+        </div>`));
+    }catch(err){ mount(shell(errorBox(err.message))); }
+  }
+  function render(){
+    ({overview:panelOverview, users:panelUsers, tasks:panelTasks, proofs:panelProofs,
+      dep:panelDep, wd:panelWd, coupon:panelCoupon, settings:panelSettings}[active])();
+  }
+  render();
+}
+
+/* ================= ROUTER ================= */
+const ROUTES = {
+  "/": pageLogin, "/home": pageIndex, "/login": pageLogin, "/register": pageRegister, "/dashboard": pageDashboard,
+  "/tasks": pageTasks, "/task": pageTask, "/create-task": pageCreateTask, "/proofs": pageProofs,
+  "/manage": pageManage, "/deposit": pageDeposit, "/withdraw": pageWithdraw, "/vip": pageVip,
+  "/spin": pageSpin, "/streak": pageStreak, "/coupon": pageCoupon, "/invite": pageInvite, "/admin": pageAdmin, "/profile": pageProfile, "/notifications": pageNotifications,
+};
+async function router(){
+  const { route } = hashParts();
+  window.scrollTo(0,0);
+  let settings = null;
+  try { settings = await api("/public/settings"); } catch(e) { settings = null; }
+  if (settings && settings.maintenanceMode && !isCurrentUserAdmin() && route !== "/login") {
+    mount(`<div class="grad header-block center" style="padding:60px 24px;min-height:100vh">
+      <div style="font-size:50px;margin-bottom:14px">🛠️</div>
+      <h1 style="font-size:22px;margin-bottom:10px">We'll be right back!</h1>
+      <p style="opacity:.9">${settings.maintenanceMessage||"We're doing some quick maintenance. Please check back soon!"}</p>
+      <a href="#/login" style="display:inline-block;margin-top:22px;color:#fff;opacity:.8;font-size:13px;text-decoration:underline">Admin Login</a>
+    </div>`);
+    return;
+  }
+  (ROUTES[route] || pageLogin)();
+}
+window.addEventListener("hashchange", router);
+(async function(){
+  await initAuth();
+  router();
+})();
+</script>
+<!--Start of Tawk.to Script-->
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/6a49d32fbe29271d4d92c61a/default';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+</script>
+<!--End of Tawk.to Script-->
+</body>
+</html>
