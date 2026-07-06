@@ -1,1 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Under Maintenance</title>
 
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:Arial, sans-serif;
+    color:white;
+}
+
+/* Parallax Background */
+.parallax{
+    background-image:url('https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1600');
+    min-height:100vh;
+    background-attachment:fixed;
+    background-position:center;
+    background-repeat:no-repeat;
+    background-size:cover;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.overlay{
+    background:rgba(0,0,0,0.55);
+    padding:40px 60px;
+    border-radius:15px;
+    text-align:center;
+    backdrop-filter:blur(4px);
+}
+
+h1{
+    font-size:55px;
+    letter-spacing:3px;
+}
+
+p{
+    margin-top:15px;
+    font-size:18px;
+    opacity:0.9;
+}
+</style>
+
+</head>
+<body>
+
+<div class="parallax">
+    <div class="overlay">
+        <h1>UNDER MAINTENANCE</h1>
+        <p>We're working on something amazing.</p>
+    </div>
+</div>
+
+</body>
+  </html>
